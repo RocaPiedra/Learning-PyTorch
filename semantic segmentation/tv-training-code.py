@@ -14,6 +14,11 @@ from engine import train_one_epoch, evaluate
 import utils
 import transforms as T
 
+torch.cuda.empty_cache()
+# import gc
+# del variables
+# gc.collect()
+
 
 class PennFudanDataset(object):
     def __init__(self, root, transforms):
@@ -111,8 +116,15 @@ def get_transform(train):
 
 def main():
     # train on the GPU or on the CPU, if a GPU is not available
-    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-
+    # device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+    # print('torch cuda device is available?')
+    # if torch.cuda.is_available():
+    #     print('yes, device is:')
+    #     device = torch.cuda.current_device()
+    #     print(device)
+    #     name = torch.cuda.get_device_name(0)
+    #     print(name)
+    device = torch.device("cpu")
     # our dataset has two classes only - background and person
     num_classes = 2
     # use our dataset and defined transformations
@@ -153,7 +165,9 @@ def main():
 
     for epoch in range(num_epochs):
         # train for one epoch, printing every 10 iterations
+        print('training epoch number ',epoch)
         train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
+        print('training epoch number ',epoch,' finished')
         # update the learning rate
         lr_scheduler.step()
         # evaluate on the test dataset
