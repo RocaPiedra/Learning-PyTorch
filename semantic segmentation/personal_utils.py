@@ -61,6 +61,8 @@ def open_2_tensor(route):
 #saves an image of the image with the predicted boxes
 def save_predicted_boxes(prediction, img):
   og = Image.fromarray(img.mul(255).permute(1, 2, 0).byte().cpu().numpy())
+  h,w,c = np.shape(og)
+  adaptive_width = np.int(h/200)
   vertex = prediction[0]['boxes'].cpu().detach().numpy()
   img_path = 'out_file_boxes.png'
   draw = ImageDraw.Draw(og)
@@ -69,7 +71,7 @@ def save_predicted_boxes(prediction, img):
     b = int(random.random()*255)
     g = int(random.random()*255) 
     color = (r,g,b)
-    draw.rectangle(v, fill=None, outline=color, width=10)
+    draw.rectangle(v, fill=None, outline=color, width=adaptive_width)
   og.save(img_path)
   return img_path
 
