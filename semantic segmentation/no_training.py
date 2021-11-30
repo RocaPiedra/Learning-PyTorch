@@ -33,20 +33,20 @@ def main():
     #print(model)
     
     try:
-        img = open_2_tensor('TestImages/DSC_0257.JPG')
+        img = open_2_tensor('./TestImages/DSC_0257.JPG')
         model.eval()
         with torch.no_grad():
             prediction = model([img.to(device)])
         
     except:
         print('Using PennFudanPed image')
-        img = open_2_tensor('PennFudanPed/PNGImages/FudanPed00074.png')
+        img = open_2_tensor('./PennFudanPed/PNGImages/FudanPed00074.png')
         model.eval()
         with torch.no_grad():
             prediction = model([img.to(device)])
         
     plt.imshow(np.asarray(img.mul(255).permute(1, 2, 0).byte().cpu().numpy()))
-
+    plt.show()
     img_path = save_predicted_boxes(prediction, img)
 
     Image.open(img_path)
